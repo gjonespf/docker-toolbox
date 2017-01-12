@@ -55,4 +55,7 @@ RUN 			curl -SL $POWERSHELL_DOWNLOAD_URL --output powershell.deb \
 				&& rm powershell.deb \
 				&& apt-get clean
 
+#Set PSGallery to trusted, and install PS module PSDepend by default
+RUN				powershell -c "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted; Install-Module -Name PSDepend -Force"				
+
 RUN 			echo $TAG >> build_tag
