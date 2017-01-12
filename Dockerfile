@@ -6,7 +6,7 @@ ENV 			DOCKER_MACHINE_VERSION 0.7.0
 ENV 			TERM xterm
 #To override if needed
 ARG 			TAG=dev
-ENV 			POWERSHELL_DOWNLOAD_URL https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.13/powershell_6.0.0-alpha.13-1ubuntu1.16.04.1_amd64.deb
+ENV 			POWERSHELL_DOWNLOAD_URL https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.14/powershell_6.0.0-alpha.14-1ubuntu1.16.04.1_amd64.deb
 ENV 			TAG ${TAG}
 ENV				DOTNET_PACKAGE dotnet-dev-1.0.0-preview2.1-003177
 
@@ -45,7 +45,6 @@ RUN 			apt-get update \
 				&& apt-get install ${DOTNET_PACKAGE} -y \
 				&& mkdir /powershell \
 				&& apt-get clean
-#dotnet-dev-1.0.0-preview2.1-003177
 
 # Install PowerShell
 ### Set the working directory to /powershell
@@ -59,6 +58,8 @@ RUN 			curl -SL $POWERSHELL_DOWNLOAD_URL --output powershell.deb \
 				&& apt-get clean
 
 #Set PSGallery to trusted, and install PS module PSDepend by default
-RUN				powershell -c "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted; Install-Module -Name PSDepend -Force"				
+RUN				powershell -c "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted"
+#PSDepend not currently working... Re-enable when it does
+#RUN				powershell -c "Install-Module -Name PSDepend -Force"				
 
 RUN 			echo $TAG >> build_tag
