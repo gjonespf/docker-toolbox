@@ -8,6 +8,7 @@ ENV 			TERM xterm
 ARG 			TAG=dev
 ENV 			POWERSHELL_DOWNLOAD_URL https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.13/powershell_6.0.0-alpha.13-1ubuntu1.16.04.1_amd64.deb
 ENV 			TAG ${TAG}
+ENV				DOTNET_PACKAGE dotnet-dev-1.0.0-preview2.1-003177
 
 RUN 			apt-get update  \
 				&& apt-get install -y git subversion nano wget curl iputils-ping dnsutils  \
@@ -38,11 +39,13 @@ RUN 			apt-get update \
 				&& apt-get install apt-transport-https curl -y \
 				&& sh -c 'echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ xenial main" > /etc/apt/sources.list.d/dotnetdev.list' \
 				&& apt-get update \
-				&& apt-key adv --keyserver apt-mo.trafficmanager.net --recv-keys 417A0893 \
+				&& apt-get install ca-certificates \
+				&& apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 417A0893 \
 				&& apt-get update \
-				&& apt-get install dotnet-dev-1.0.0-preview2-003121 -y \
+				&& apt-get install ${DOTNET_PACKAGE} -y \
 				&& mkdir /powershell \
 				&& apt-get clean
+#dotnet-dev-1.0.0-preview2.1-003177
 
 # Install PowerShell
 ### Set the working directory to /powershell
