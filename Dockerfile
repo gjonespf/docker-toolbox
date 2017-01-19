@@ -1,7 +1,7 @@
 FROM 			ubuntu:xenial
 MAINTAINER 		Gavin Jones <gjones@powerfarming.co.nz>
 ENV 			DOCKER_VERSION 1.12.0
-ENV 			DOCKER_COMPOSE_VERSION 1.8.0
+ENV 			DOCKER_COMPOSE_VERSION 1.10.0
 ENV 			DOCKER_MACHINE_VERSION 0.7.0
 ENV 			TERM xterm
 #To override if needed
@@ -21,7 +21,7 @@ RUN         curl -L -o /tmp/docker-latest.tgz https://get.docker.com/builds/Linu
             mv docker/* /usr/bin/ 
 
 #Docker compose
-RUN 			curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose && \
+RUN 			curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose && \
 				chmod +x /usr/local/bin/docker-compose
 
 #Docker machine
