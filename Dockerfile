@@ -1,14 +1,19 @@
 FROM 			ubuntu:xenial
 MAINTAINER 		Gavin Jones <gjones@powerfarming.co.nz>
-ENV 			DOCKER_VERSION 1.12.0
-ENV 			DOCKER_COMPOSE_VERSION 1.10.0
+# https://github.com/moby/moby/releases/
+ENV 			DOCKER_VERSION 17.05.0-ce
+# https://github.com/docker/compose/releases/
+ENV 			DOCKER_COMPOSE_VERSION 1.13.0
+# https://github.com/docker/machine/releases/
 ENV 			DOCKER_MACHINE_VERSION 0.7.0
 ENV 			TERM xterm
 #To override if needed
 ARG 			TAG=dev
-ENV 			POWERSHELL_DOWNLOAD_URL https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.14/powershell_6.0.0-alpha.14-1ubuntu1.16.04.1_amd64.deb
 ENV 			TAG ${TAG}
-ENV				DOTNET_PACKAGE dotnet-dev-1.0.0-preview2.1-003177
+# https://www.microsoft.com/net/core#linuxubuntu
+ENV				DOTNET_PACKAGE dotnet-dev-1.0.4
+# https://github.com/PowerShell/PowerShell/releases
+ENV 			POWERSHELL_DOWNLOAD_URL https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.2/powershell_6.0.0-beta.2-1ubuntu1.16.04.1_amd64.deb
 
 RUN 			apt-get update  \
 				&& apt-get install -y git subversion nano wget curl iputils-ping dnsutils  \
