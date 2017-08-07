@@ -3,7 +3,7 @@ MAINTAINER 		Gavin Jones <gjones@powerfarming.co.nz>
 # https://github.com/moby/moby/releases/
 ENV 			DOCKER_VERSION 17.05.0-ce
 # https://github.com/docker/compose/releases/
-ENV 			DOCKER_COMPOSE_VERSION 1.13.0
+ENV 			DOCKER_COMPOSE_VERSION 1.14.0
 # https://github.com/docker/machine/releases/
 ENV 			DOCKER_MACHINE_VERSION 0.7.0
 ENV 			TERM xterm
@@ -13,7 +13,10 @@ ENV 			TAG ${TAG}
 # https://www.microsoft.com/net/core#linuxubuntu
 ENV				DOTNET_PACKAGE dotnet-dev-1.0.4
 # https://github.com/PowerShell/PowerShell/releases
-ENV 			POWERSHELL_DOWNLOAD_URL https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.2/powershell_6.0.0-beta.2-1ubuntu1.16.04.1_amd64.deb
+# Use official list instead
+#ENV 			POWERSHELL_DOWNLOAD_URL https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.2/powershell_6.0.0-beta.2-1ubuntu1.16.04.1_amd64.deb
+ENV				DISTRIB_CODENAME xenial
+ENV				DISTRIB_RELEASE 16.04
 
 RUN 			apt-get update  \
 				&& apt-get install -y git subversion nano wget curl iputils-ping dnsutils  \
@@ -39,6 +42,26 @@ RUN			curl -L https://dl.minio.io/server/minio/release/linux-amd64/minio > /usr/
 RUN			curl -L https://dl.minio.io/client/mc/release/linux-amd64/mc > /usr/local/bin/mc && \
 				chmod +x /usr/local/bin/mc
 
+#Mono dev needed for some things with .NET Core for the moment
+RUN				apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF \
+				&& echo "deb http://download.mono-project.com/repo/ubuntu $DISTRIB_CODENAME main" > /etc/apt/sources.list.d/mono-official.list \
+				&& apt-get update \
+    			&& DEBIAN_FRONTEND="noninteractive" apt-get -y install mono-devel \
+				&& apt-get clean
+
+RUN 			cert-sync /etc/ssl/certs/ca-certificates.crt
+
+# MS Certs and setup needed
+RUN				yes | certmgr -ssl -m https://go.microsoft.com  \
+	 			yes | certmgr -ssl -m https://nugetgallery.blob.core.windows.net \
+	 			yes | certmgr -ssl -m https://nuget.org 
+
+RUN				curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+
+# Register the Microsoft Ubuntu repository
+RUN				curl https://packages.microsoft.com/config/ubuntu/$DISTRIB_RELEASE/prod.list > /etc/apt/sources.list.d/microsoft.list
+
+
 ### Install .NET Core
 RUN 			apt-get update \
 				&& apt-get install apt-transport-https curl -y \
@@ -49,6 +72,7 @@ RUN 			apt-get update \
 				&& apt-get update \
 				&& apt-get install ${DOTNET_PACKAGE} -y \
 				&& mkdir /powershell \
+				&& DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata unzip nuget \
 				&& apt-get clean
 
 # Install PowerShell
