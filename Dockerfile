@@ -61,30 +61,27 @@ RUN				curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
 # Register the Microsoft Ubuntu repository
 RUN				curl https://packages.microsoft.com/config/ubuntu/$DISTRIB_RELEASE/prod.list > /etc/apt/sources.list.d/microsoft.list
 
-
-### Install .NET Core
+### Install .NET Core, nuget, PowerShell
+				# && apt-get update \
 RUN 			apt-get update \
 				&& apt-get install apt-transport-https curl -y \
 				&& sh -c 'echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ xenial main" > /etc/apt/sources.list.d/dotnetdev.list' \
 				&& apt-get update \
 				&& apt-get install ca-certificates \
 				&& apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 417A0893 \
-				&& apt-get update \
 				&& apt-get install ${DOTNET_PACKAGE} -y \
+				&& apt-get install -y powershell \
 				&& mkdir /powershell \
 				&& DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata unzip nuget \
 				&& apt-get clean
 
-# Install PowerShell
-### Set the working directory to /powershell
-WORKDIR 		/powershell
 
 ### Set some environment variables
-RUN 			curl -SL $POWERSHELL_DOWNLOAD_URL --output powershell.deb \
-				&& apt-get install libunwind8 libicu55 \
-				&& dpkg --install powershell.deb \
-				&& rm powershell.deb \
-				&& apt-get clean
+# RUN 			curl -SL $POWERSHELL_DOWNLOAD_URL --output powershell.deb \
+# 				&& apt-get install libunwind8 libicu55 \
+# 				&& dpkg --install powershell.deb \
+# 				&& rm powershell.deb \
+# 				&& apt-get clean
 
 #Set PSGallery to trusted, and install PS module PSDepend by default
 RUN				powershell -c "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted"
