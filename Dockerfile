@@ -3,15 +3,15 @@ MAINTAINER 		Gavin Jones <gjones@powerfarming.co.nz>
 # https://github.com/moby/moby/releases/
 ENV 			DOCKER_VERSION 17.05.0-ce
 # https://github.com/docker/compose/releases/
-ENV 			DOCKER_COMPOSE_VERSION 1.14.0
+ENV 			DOCKER_COMPOSE_VERSION 1.17.1
 # https://github.com/docker/machine/releases/
-ENV 			DOCKER_MACHINE_VERSION 0.7.0
+ENV 			DOCKER_MACHINE_VERSION 0.13.0
 ENV 			TERM xterm
 #To override if needed
 ARG 			TAG=dev
 ENV 			TAG ${TAG}
-# https://www.microsoft.com/net/core#linuxubuntu
-ENV				DOTNET_PACKAGE dotnet-dev-1.0.4
+# https://www.microsoft.com/net/learn/get-started/linuxubuntu
+ENV				DOTNET_PACKAGE dotnet-sdk-2.0.2
 # https://github.com/PowerShell/PowerShell/releases
 # Use official list instead
 #ENV 			POWERSHELL_DOWNLOAD_URL https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.2/powershell_6.0.0-beta.2-1ubuntu1.16.04.1_amd64.deb
@@ -56,20 +56,23 @@ RUN				yes | certmgr -ssl -m https://go.microsoft.com  \
 	 			yes | certmgr -ssl -m https://nugetgallery.blob.core.windows.net \
 	 			yes | certmgr -ssl -m https://nuget.org 
 
-RUN				curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
-
+#RUN				curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
 # Register the Microsoft Ubuntu repository
-RUN				curl https://packages.microsoft.com/config/ubuntu/$DISTRIB_RELEASE/prod.list > /etc/apt/sources.list.d/microsoft.list
+#RUN				apt-get install apt-transport-https curl -y && curl https://packages.microsoft.com/config/ubuntu/$DISTRIB_RELEASE/prod.list > /etc/apt/sources.list.d/microsoft.list
 
 ### Install .NET Core, nuget, PowerShell
-				# && apt-get update \
-RUN 			apt-get update \
-				&& apt-get install apt-transport-https curl -y \
+RUN 			apt-get install apt-transport-https curl -y \
+				&& apt-get install --reinstall ca-certificates \
+				&& curl https://packages.microsoft.com/config/ubuntu/$DISTRIB_RELEASE/prod.list > /etc/apt/sources.list.d/microsoft.list \
+				&& curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+				&& apt-get update \
 				&& sh -c 'echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ xenial main" > /etc/apt/sources.list.d/dotnetdev.list' \
 				&& apt-get update \
-				&& apt-get install ca-certificates \
+#				&& apt-get install ca-certificates \
 				&& apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 417A0893 \
-				&& apt-get install ${DOTNET_PACKAGE} -y \
+				&& apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys B02C46DF417A0893 \
+				# TODO: Fix issues with unauthenticated
+				&& apt-get install ${DOTNET_PACKAGE} --allow-unauthenticated -y \
 				&& apt-get install -y powershell \
 				&& mkdir /powershell \
 				&& DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata unzip nuget \
