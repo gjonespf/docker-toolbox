@@ -87,7 +87,8 @@ RUN 			apt-get install apt-transport-https curl -y \
 # 				&& apt-get clean
 
 #Set PSGallery to trusted, and install PS module PSDepend by default
-RUN				powershell -c "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted"
+#RUN				pwsh -c "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted"
+#RUN				powershell -c "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted"
 #PSDepend not currently working... Re-enable when it does
 #RUN				powershell -c "Install-Module -Name PSDepend -Force"				
 
