@@ -1,11 +1,12 @@
 FROM 			ubuntu:xenial
 MAINTAINER 		Gavin Jones <gjones@powerfarming.co.nz>
 # https://github.com/moby/moby/releases/
-ENV 			DOCKER_VERSION 17.09.0-ce
+ENV 			DOCKER_VERSION 17.12.0-ce
 # https://github.com/docker/compose/releases/
 ENV 			DOCKER_COMPOSE_VERSION 1.17.1
 # https://github.com/docker/machine/releases/
 ENV 			DOCKER_MACHINE_VERSION 0.13.0
+ENV	 			MACH_ARCH x86_64
 ENV 			TERM xterm
 #To override if needed
 ARG 			TAG=dev
@@ -24,7 +25,9 @@ RUN 			apt-get update  \
 
 #Docker bins
 WORKDIR     /home/toolbox/
-RUN         curl -L -o /tmp/docker-latest.tgz https://get.docker.com/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz && \
+# Try new URL
+#RUN         curl -L -o /tmp/docker-latest.tgz https://get.docker.com/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz && \
+RUN         curl -L -o /tmp/docker-latest.tgz https://download.docker.com/linux/static/stable/${MACH_ARCH}/docker-${DOCKER_VERSION}.tgz && \
             tar -xvzf /tmp/docker-latest.tgz && \
             mv docker/* /usr/bin/ 
 
