@@ -3,7 +3,7 @@ MAINTAINER 		Gavin Jones <gjones@powerfarming.co.nz>
 # https://github.com/moby/moby/releases/
 ENV 			DOCKER_VERSION 17.12.0-ce
 # https://github.com/docker/compose/releases/
-ENV 			DOCKER_COMPOSE_VERSION 1.17.1
+ENV 			DOCKER_COMPOSE_VERSION 1.18.0
 # https://github.com/docker/machine/releases/
 ENV 			DOCKER_MACHINE_VERSION 0.13.0
 ENV	 			MACH_ARCH x86_64
