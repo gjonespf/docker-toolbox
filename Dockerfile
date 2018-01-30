@@ -1,7 +1,7 @@
 FROM 			ubuntu:xenial
 MAINTAINER 		Gavin Jones <gjones@powerfarming.co.nz>
 # https://github.com/moby/moby/releases/
-ENV 			DOCKER_VERSION 17.05.0-ce
+ENV 			DOCKER_VERSION 17.09.0-ce
 # https://github.com/docker/compose/releases/
 ENV 			DOCKER_COMPOSE_VERSION 1.17.1
 # https://github.com/docker/machine/releases/
@@ -87,9 +87,9 @@ RUN 			apt-get install apt-transport-https curl -y \
 # 				&& apt-get clean
 
 #Set PSGallery to trusted, and install PS module PSDepend by default
-#RUN				pwsh -c "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted"
+RUN				pwsh -c "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted"
 #RUN				powershell -c "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted"
 #PSDepend not currently working... Re-enable when it does
-#RUN				powershell -c "Install-Module -Name PSDepend -Force"				
+RUN				pwsh -c "Install-Module -Name PSDepend; Import-Module PSDepend"				
 
 RUN 			echo $TAG >> build_tag
