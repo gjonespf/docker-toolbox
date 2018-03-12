@@ -1,0 +1,37 @@
+
+# Conventions
+Package
+dist/
+
+# Cruft
+*.zip
+
+# Versioning
+Assembly*Version.json
+
+# Nodejs
+node_modules
+package-lock.json
+
+#VS
+obj
+bin
+*.suo
+*.sqlite
+VSWorkspaceState.json
+AssemblyInfo.cs
+storage.ide
+
+# Cake
+!tools/packages.config
+tools
+*.dist.cake
+buildparameters.json
+.env.debug
+.env
+.buildenv
+
+# Sig
+key.snk
+*.user
+packages
