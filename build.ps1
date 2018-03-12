@@ -87,6 +87,11 @@ if($FoundDotNetCliVersion -ne $DotNetVersion) {
     $env:PATH = "$InstallPath;$env:PATH"
 }
 
+$ShellPrefixExec = ""
+if (Get-Command mono -ErrorAction SilentlyContinue) {
+    $ShellPrefixExec = "mono"
+}
+
 $env:DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
 $env:DOTNET_CLI_TELEMETRY_OPTOUT=1
 
@@ -109,7 +114,7 @@ if (!(Test-Path $NugetPath)) {
 $CakePath = Join-Path $ToolPath "Cake.$CakeVersion/Cake.exe"
 if (!(Test-Path $CakePath)) {
     Write-Host "Installing Cake..."
-    Invoke-Expression "&`"$NugetPath`" install Cake -Version $CakeVersion -OutputDirectory `"$ToolPath`"" | Out-Null;
+    Invoke-Expression "& $ShellPrefixExec `"$NugetPath`" install Cake -Version $CakeVersion -OutputDirectory `"$ToolPath`"" | Out-Null;
     if ($LASTEXITCODE -ne 0) {
         Throw "An error occurred while restoring Cake from NuGet."
     }
@@ -129,5 +134,5 @@ $Arguments = @{
 
 # Start Cake
 Write-Host "Running build script..."
-Invoke-Expression "& `"$CakePath`" `"build.cake`" $Arguments $ScriptArgs"
+Invoke-Expression "& $ShellPrefixExec `"$CakePath`" `"build.cake`" $Arguments $ScriptArgs"
 exit $LASTEXITCODE
