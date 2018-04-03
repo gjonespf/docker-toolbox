@@ -1,9 +1,10 @@
 FROM 			ubuntu:xenial
 MAINTAINER 		Gavin Jones <gjones@powerfarming.co.nz>
 # https://github.com/moby/moby/releases/
-ENV 			DOCKER_VERSION 17.03.2-ce
+# https://download.docker.com/linux/static/stable/x86_64/
+ENV 			DOCKER_VERSION 18.03.0-ce
 # https://github.com/docker/compose/releases/
-ENV 			DOCKER_COMPOSE_VERSION 1.18.0
+ENV 			DOCKER_COMPOSE_VERSION 1.20.0
 # https://github.com/docker/machine/releases/
 ENV 			DOCKER_MACHINE_VERSION 0.14.0
 ENV	 			MACH_ARCH x86_64
