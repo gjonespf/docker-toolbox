@@ -32,6 +32,7 @@ buildparameters.json
 .buildenv
 .dotnet
 gitversion.properties
+BuildVersion.json
 
 # Sig
 key.snk
