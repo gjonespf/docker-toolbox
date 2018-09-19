@@ -1,12 +1,12 @@
-FROM 			ubuntu:xenial
+FROM 			ubuntu:bionic
 MAINTAINER 		Gavin Jones <gjones@powerfarming.co.nz>
 # https://github.com/moby/moby/releases/
 # https://download.docker.com/linux/static/stable/x86_64/
-ENV 			DOCKER_VERSION 18.03.0-ce
+ENV 			DOCKER_VERSION 18.06.1-ce
 # https://github.com/docker/compose/releases/
-ENV 			DOCKER_COMPOSE_VERSION 1.20.0
+ENV 			DOCKER_COMPOSE_VERSION 1.22.0
 # https://github.com/docker/machine/releases/
-ENV 			DOCKER_MACHINE_VERSION 0.14.0
+ENV 			DOCKER_MACHINE_VERSION 0.15.0
 ENV	 			MACH_ARCH x86_64
 ENV 			TERM xterm
 #To override if needed
@@ -17,8 +17,8 @@ ENV				DOTNET_PACKAGE dotnet-sdk-2.1.4
 # https://github.com/PowerShell/PowerShell/releases
 # Use official list instead
 #ENV 			POWERSHELL_DOWNLOAD_URL https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.2/powershell_6.0.0-beta.2-1ubuntu1.16.04.1_amd64.deb
-ENV				DISTRIB_CODENAME xenial
-ENV				DISTRIB_RELEASE 16.04
+ENV				DISTRIB_CODENAME bionic
+ENV				DISTRIB_RELEASE 18.04
 
 RUN 			apt-get update  \
 				&& apt-get install -y git subversion nano wget curl iputils-ping dnsutils  \
@@ -79,7 +79,7 @@ RUN 			apt-get install apt-transport-https curl -y \
 				&& apt-get install ${DOTNET_PACKAGE} --allow-unauthenticated -y \
 				&& apt-get install -y powershell \
 				&& mkdir /powershell \
-				&& DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata unzip nuget \
+				&& DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata unzip nuget lastpass-cli \
 				&& apt-get clean
 
 

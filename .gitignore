@@ -30,6 +30,7 @@ buildparameters.json
 .env.debug
 .env
 .buildenv
+.dotnet
 
 # Sig
 key.snk

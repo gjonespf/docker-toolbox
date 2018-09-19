@@ -1,42 +1,76 @@
 // Load your project specific stuff here
 
-Task("ProjInit")
-    .Does(() =>
+//#load "nuget:https://nuget.powerfarming.co.nz/api/odata?package=PowerFarming.PowerShell.BuildTools&version=0.2.2"
+#addin "nuget:?package=Cake.Powershell&version=0.4.5"
+
+BuildParameters.SetParameters(context: Context,
+                            buildSystem: BuildSystem,
+                            sourceDirectoryPath: "./src",
+                            title: "PowerFarming.DockerToolbox",
+                            repositoryOwner: "gjones@powerfarming.co.nz",
+                            repositoryName: "PowerFarming.DockerToolbox",
+                            shouldPostToMicrosoftTeams: true,
+                            shouldRunGitVersion: true
+                            );
+
+//BuildParameters.Paths.Directories.NugetNuspecDirectory = BuildParameters.SourceDirectoryPath;
+
+Task("Init")
+    .IsDependentOn("PFInit")
+    .IsDependentOn("Generate-Version-File-PF")
+	.Does(() => {
+		Information("Init");
+    });
+
+BuildParameters.Tasks.CleanTask
+    .IsDependentOn("Generate-Version-File-PF")
+    .Does(() => {
+    });
+BuildParameters.Tasks.RestoreTask
+	//.IsDependentOn("Package-Docker")
+    .Does(() => {
+    });
+
+BuildParameters.Tasks.PackageTask
+	.IsDependentOn("Package-Docker");
+
+BuildParameters.Tasks.BuildTask
+	.IsDependentOn("Build-Docker");
+
+Task("Publish")
+	.IsDependentOn("Publish-Artifacts")
+	.IsDependentOn("Publish-PFDocker")
+	.Does(() => {
+	});
+    
+Teardown(context =>
 {
-    // Register project handlers?
-    //Verbose("ProjInit");
-    solution.DumpParameters();
+    // Executed AFTER the last task.
 });
 
-Task("ProjClean")
+Task("PSSign")
+    .Does(() =>
+{
+    StartPowershellFile("./Scripts/SignAll.ps1", args =>
+        {
+            args.Append("Path", BuildParameters.SolutionFilePath);
+        });
+});
+
+Task("BuildPackage")
+    .IsDependentOn("Build")
+    .IsDependentOn("PSSign")
+    .IsDependentOn("Package")
     .Does(() =>
 {
     //Verbose("ProjClean");
 });
 
-
-Task("ProjBuild")
+Task("BuildPackagePublish")
+    .IsDependentOn("Build")
+    .IsDependentOn("Package")
+    .IsDependentOn("Publish")
     .Does(() =>
 {
-    //Verbose("ProjBuild");
+    //Verbose("ProjClean");
 });
-
-Task("ProjPackage")
-    .Does(() =>
-{
-    //Verbose("ProjPackage");
-});
-
-Task("ProjTest")
-    .Does(() =>
-{
-    //Verbose("ProjTest");
-});
-
-Task("ProjPublish")
-    .Does(() =>
-{
-    //Verbose("ProjPublish");
-});
-
-

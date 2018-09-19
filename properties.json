@@ -5,5 +5,5 @@
   "DefaultRemote": "pfdockerregistry-on.azurecr.io",
   "IMAGE_NAME": "docker-toolbox",
   "IMAGE_DESC": "Handy utilities toolbox",
-  "IMAGE_URL": "http://example.com/testing"
+  "IMAGE_URL": "https://github.com/gjonespf/docker-toolbox.git"
 }
