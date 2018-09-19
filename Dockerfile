@@ -50,7 +50,7 @@ RUN			curl -L https://dl.minio.io/client/mc/release/linux-amd64/mc > /usr/local/
 RUN				apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF \
 				&& echo "deb http://download.mono-project.com/repo/ubuntu $DISTRIB_CODENAME main" > /etc/apt/sources.list.d/mono-official.list \
 				&& apt-get update \
-    			&& DEBIAN_FRONTEND="noninteractive" apt-get -y install mono-devel \
+    			&& DEBIAN_FRONTEND="noninteractive" apt-get -y install gnupg mono-devel \
 				&& apt-get clean
 
 RUN 			cert-sync /etc/ssl/certs/ca-certificates.crt
