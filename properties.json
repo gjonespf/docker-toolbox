@@ -3,7 +3,8 @@
   "DefaultTag": "latest",
   "DefaultUser": "gavinjonespf",
   "DefaultRemote": "pfdockerregistry-on.azurecr.io",
-  "IMAGE_NAME": "docker-toolbox",
-  "IMAGE_DESC": "Handy utilities toolbox",
-  "IMAGE_URL": "https://github.com/gjonespf/docker-toolbox.git"
+  "ProjectName": "docker-toolbox",
+  "ProjectCodeName": "docker-toolbox",
+  "ProjectDescription": "Handy utilities toolbox",
+  "ProjectUrl": "https://github.com/gjonespf/docker-toolbox.git"
 }

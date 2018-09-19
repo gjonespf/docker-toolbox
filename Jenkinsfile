@@ -8,7 +8,7 @@ def executeXplat(commandString) {
 }
 
 node {
-    agent { label 'win-cake' } 
+    agent { label 'xplat-cake' } 
 
     environment { 
         BUILD_HOST = 'Jenkins'
