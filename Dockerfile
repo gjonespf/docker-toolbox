@@ -13,7 +13,7 @@ ENV 			TERM xterm
 ARG 			TAG=dev
 ENV 			TAG ${TAG}
 # https://www.microsoft.com/net/learn/get-started/linuxubuntu
-ENV				DOTNET_PACKAGE dotnet-sdk-2.1.4
+ENV				DOTNET_PACKAGE dotnet-sdk-2.1
 # https://github.com/PowerShell/PowerShell/releases
 # Use official list instead
 #ENV 			POWERSHELL_DOWNLOAD_URL https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.2/powershell_6.0.0-beta.2-1ubuntu1.16.04.1_amd64.deb
@@ -74,11 +74,16 @@ RUN 			apt-get install apt-transport-https curl -y \
 				&& curl https://packages.microsoft.com/config/ubuntu/$DISTRIB_RELEASE/prod.list > /etc/apt/sources.list.d/microsoft.list \
 				&& curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
 				&& apt-get update \
-				&& sh -c 'echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ xenial main" > /etc/apt/sources.list.d/dotnetdev.list' \
+				#&& sh -c 'echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ xenial main" > /etc/apt/sources.list.d/dotnetdev.list' \
+				&& sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-bionic-prod bionic main" > /etc/apt/sources.list.d/dotnetdev.list' \
+				&& wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb \
+				&& dpkg -i packages-microsoft-prod.deb \
 				&& apt-get update \
 #				&& apt-get install ca-certificates \
 				&& apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 417A0893 \
 				&& apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys B02C46DF417A0893 \
+				&& apt-key adv --keyserver packages.microsoft.com --recv-keys EB3E94ADBE1229CF \
+				&& apt-key adv --keyserver packages.microsoft.com --recv-keys 52E16F86FEE04B979B07E28DB02C46DF417A0893 \
 				# TODO: Fix issues with unauthenticated
 				&& apt-get install ${DOTNET_PACKAGE} --allow-unauthenticated -y \
 				&& apt-get install -y powershell \
