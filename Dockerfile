@@ -91,6 +91,10 @@ RUN 			apt-get install apt-transport-https curl -y \
 				&& DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata unzip nuget lastpass-cli \
 				&& apt-get clean
 
+# uuencode/uudecode is useful
+RUN 			apt-get install -y sharutils \
+				&& apt-get clean
+
 
 ### Set some environment variables
 # RUN 			curl -SL $POWERSHELL_DOWNLOAD_URL --output powershell.deb \
