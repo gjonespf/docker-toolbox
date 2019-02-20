@@ -2,18 +2,18 @@ FROM 			ubuntu:bionic
 MAINTAINER 		Gavin Jones <gjones@powerfarming.co.nz>
 # https://github.com/moby/moby/releases/
 # https://download.docker.com/linux/static/stable/x86_64/
-ENV 			DOCKER_VERSION 18.06.1-ce
+ENV 			DOCKER_VERSION 18.09.2
 # https://github.com/docker/compose/releases/
-ENV 			DOCKER_COMPOSE_VERSION 1.22.0
+ENV 			DOCKER_COMPOSE_VERSION 1.24.0-rc1
 # https://github.com/docker/machine/releases/
-ENV 			DOCKER_MACHINE_VERSION 0.15.0
+ENV 			DOCKER_MACHINE_VERSION v0.16.1
 ENV	 			MACH_ARCH x86_64
 ENV 			TERM xterm
 #To override if needed
 ARG 			TAG=dev
 ENV 			TAG ${TAG}
 # https://www.microsoft.com/net/learn/get-started/linuxubuntu
-ENV				DOTNET_PACKAGE dotnet-sdk-2.1
+ENV				DOTNET_PACKAGE dotnet-sdk-2.2
 # https://github.com/PowerShell/PowerShell/releases
 # Use official list instead
 #ENV 			POWERSHELL_DOWNLOAD_URL https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.2/powershell_6.0.0-beta.2-1ubuntu1.16.04.1_amd64.deb
