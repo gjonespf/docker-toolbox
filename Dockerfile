@@ -98,7 +98,7 @@ RUN apk add --no-cache \
 # Add users/groups to allow binding to host fs
 RUN 			addgroup --gid 500 core && \
 				#adduser --home /home/core --shell /bin/bash -u 500 -G core --disabled-password --system core && \
-				adduser --home /home/octo --shell /bin/bash -u 1000 -G core --disabled-password 
+				adduser -h /home/octo -s /bin/bash -u 1000 -G core -D 
 
 #Set PSGallery to trusted, and install PS module PSDepend by default
 RUN				pwsh -c "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted"
