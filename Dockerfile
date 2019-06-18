@@ -22,7 +22,7 @@ ARG 			PS_PACKAGE_URL=https://github.com/PowerShell/PowerShell/releases/download
 ARG 			PS_INSTALL_VERSION=6
 
 RUN				apk update \
-				&& apk add --no-cache git nano wget curl gnupg libunwind
+				&& apk add --no-cache git nano wget curl gnupg libunwind bash
 
 #Docker bins
 WORKDIR     	/home/toolbox/
@@ -94,6 +94,11 @@ RUN apk add --no-cache \
     #         Write-Host "'Waiting for $env:PSModuleAnalysisCachePath'" ; \
     #         Start-Sleep -Seconds 6 ; \
     #       }"
+
+# Add users/groups to allow binding to host fs
+RUN 			addgroup --gid 500 core && \
+				adduser --home /home/core --shell /bin/bash -u 500 -G core --disabled-password --system core && \
+				adduser --home /home/octo --shell /bin/bash -u 1000 -G core --disabled-password --system core
 
 #Set PSGallery to trusted, and install PS module PSDepend by default
 RUN				pwsh -c "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted"
