@@ -1,4 +1,4 @@
-FROM 			mcr.microsoft.com/dotnet/core/runtime:2.2.5-alpine3.9
+FROM 			mcr.microsoft.com/dotnet/core/runtime:2.2.5-alpine3.8
 # powershell:6.2.1-alpine-3.8
 
 MAINTAINER 		Gavin Jones <gjones@powerfarming.co.nz>
@@ -22,10 +22,10 @@ ENV				DOTNET_PACKAGE dotnet-sdk-2.1
 #ENV				DISTRIB_CODENAME bionic
 ENV				DISTRIB_RELEASE 18.04
 
-ARG PS_VERSION=6.2.0-preview.3
+ARG PS_VERSION=6.2.0
 ARG PS_PACKAGE=powershell-${PS_VERSION}-linux-alpine-x64.tar.gz
 ARG PS_PACKAGE_URL=https://github.com/PowerShell/PowerShell/releases/download/v${PS_VERSION}/${PS_PACKAGE}
-ARG PS_INSTALL_VERSION=7-preview
+ARG PS_INSTALL_VERSION=6
 
 RUN				apk update \
 				&& apk add git nano wget curl 
@@ -79,7 +79,7 @@ RUN apk add --no-cache \
     krb5-libs \
     libgcc \
     libintl \
-    libssl1.1 \
+    libssl1.0 \
     libstdc++ \
     tzdata \
     userspace-rcu \
@@ -94,18 +94,19 @@ RUN apk add --no-cache \
     # Create the pwsh-preview symbolic link that points to powershell
     && ln -s ${PS_INSTALL_FOLDER}/pwsh /usr/bin/pwsh-preview \
     # Give all user execute permissions and remove write permissions for others
-    && chmod a+x,o-w ${PS_INSTALL_FOLDER}/pwsh \
+    && chmod a+x,o-w ${PS_INSTALL_FOLDER}/pwsh 
+	# \
     # intialize powershell module cache
-    && pwsh \
-        -NoLogo \
-        -NoProfile \
-        -Command " \
-          \$ErrorActionPreference = 'Stop' ; \
-          \$ProgressPreference = 'SilentlyContinue' ; \
-          while(!(Test-Path -Path \$env:PSModuleAnalysisCachePath)) {  \
-            Write-Host "'Waiting for $env:PSModuleAnalysisCachePath'" ; \
-            Start-Sleep -Seconds 6 ; \
-          }"
+    # && pwsh \
+    #     -NoLogo \
+    #     -NoProfile \
+    #     -Command " \
+    #       \$ErrorActionPreference = 'Stop' ; \
+    #       \$ProgressPreference = 'SilentlyContinue' ; \
+    #       while(!(Test-Path -Path \$env:PSModuleAnalysisCachePath)) {  \
+    #         Write-Host "'Waiting for $env:PSModuleAnalysisCachePath'" ; \
+    #         Start-Sleep -Seconds 6 ; \
+    #       }"
 		  
 # RUN 			apt-get install apt-transport-https curl -y \
 # 				&& apt-get install --reinstall ca-certificates \
