@@ -97,13 +97,11 @@ RUN apk add --no-cache \
 
 # Add users/groups to allow binding to host fs
 RUN 			addgroup --gid 500 core && \
-				#adduser --home /home/core --shell /bin/bash -u 500 -G core --disabled-password --system core && \
-				adduser -h /home/octo -s /bin/bash -u 1000 -G core -D 
+				adduser -h /home/core -s /bin/bash -u 500 -G core -D core && \
+				adduser -h /home/octo -s /bin/bash -u 1000 -G core -D octo
 
 #Set PSGallery to trusted, and install PS module PSDepend by default
-RUN				pwsh -c "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted"
-#RUN				powershell -c "Set-PSRepository -Name PSGallery -InstallationPolicy Trusted"
-#PSDepend not currently working... Re-enable when it does
-RUN				pwsh -c "Install-Module -Name PSDepend; Import-Module PSDepend"				
+#RUN				pwsh -c "Get-PSRepository; Set-PSRepository -Name PSGallery -InstallationPolicy Trusted"
+#RUN				pwsh -c "Install-Module -Name PSDepend; Import-Module PSDepend"				
 
 RUN 			echo $TAG >> build_tag
