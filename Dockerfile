@@ -1,6 +1,11 @@
 FROM 			mcr.microsoft.com/dotnet/core/runtime:2.2.5-alpine3.8
 # powershell:6.2.1-alpine-3.8
 
+ARG USER=octo
+ARG USER_UID=1000
+ARG USER_GID=500
+ARG DOCKER_GID=233
+
 MAINTAINER 		Gavin Jones <gjones@powerfarming.co.nz>
 # https://download.docker.com/linux/static/stable/x86_64/
 ENV 			DOCKER_VERSION 18.06.1-ce
@@ -22,18 +27,18 @@ ARG 			PS_PACKAGE_URL=https://github.com/PowerShell/PowerShell/releases/download
 ARG 			PS_INSTALL_VERSION=6
 
 RUN				apk update \
-				&& apk add --no-cache git nano wget curl gnupg libunwind bash
+				&& apk add --no-cache git nano wget curl gnupg libunwind bash shadow
 
 #Docker bins
 WORKDIR     	/home/toolbox/
 
 #Docker via bins to get latest
 #Just use Alpine package for now
-RUN 			apk add --no-cache docker
+RUN 			apk add --no-cache docker docker-compose 
 
 #Docker compose
-RUN 			curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose && \
-				chmod +x /usr/local/bin/docker-compose
+# RUN 			curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose && \
+# 				chmod +x /usr/local/bin/docker-compose
 
 #Docker machine
 RUN				curl -L https://github.com/docker/machine/releases/download/v${DOCKER_MACHINE_VERSION}/docker-machine-`uname -s`-`uname -m` > /usr/local/bin/docker-machine && \
@@ -94,6 +99,12 @@ RUN apk add --no-cache \
     #         Write-Host "'Waiting for $env:PSModuleAnalysisCachePath'" ; \
     #         Start-Sleep -Seconds 6 ; \
     #       }"
+
+# Create user with permissions to docker and sudo
+RUN groupadd --gid ${DOCKER_GID} docker && \
+    groupadd --gid ${USER_GID} ${USER} && \
+    useradd --uid ${USER_UID} --gid ${USER_GID} --groups docker --shell /bin/zsh --comment 'CoreOS Admin' core && \
+    echo "${USER} ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 # Add users/groups to allow binding to host fs
 RUN 			addgroup --gid 500 core && \

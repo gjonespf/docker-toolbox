@@ -15,5 +15,6 @@ docker build .
 Test manual w/ proxy
 
 ```pwsh
-docker build . HTTP_PROXY=http://10.0.75.1:3128
+docker build --build-arg HTTP_PROXY= .
+docker build --build-arg HTTP_PROXY=http://10.0.75.1:3128 .
 ```
